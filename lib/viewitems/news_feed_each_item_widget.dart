@@ -156,13 +156,14 @@ class UploadPhotoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       // width: 200, // Set the desired width of the container
       height: 200, // Set the desired height of the container
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10), // Set the desired corner radius value
         image: DecorationImage(
-          image: AssetImage('${newsFeedVO?.postImage}'), // Replace with your image path
+          image: NetworkImage('${newsFeedVO?.postImage}'), // Replace with your image path
           fit: BoxFit.cover,
         ),
       ),

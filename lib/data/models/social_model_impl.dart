@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:social_media_app/data/models/social_model.dart';
 import 'package:social_media_app/data/vos/news_feed_vo.dart';
 import 'package:social_media_app/network/cloud_firestore_data_agent_impl.dart';
@@ -13,9 +15,9 @@ class SocialModelImpl extends SocialModel{
   }
   SocialModelImpl._internal();
 
- // SocialDataAgent mDataAgent = RealtimeDatabaseDataAgentImpl();
+  SocialDataAgent mDataAgent = RealtimeDatabaseDataAgentImpl();
 
-  SocialDataAgent mDataAgent = CloudFirestoreDataAgentImpl();
+ // SocialDataAgent mDataAgent = CloudFirestoreDataAgentImpl();
 
   @override
   Stream<List<NewsFeedVO>> getNewsFeed() {
@@ -23,18 +25,28 @@ class SocialModelImpl extends SocialModel{
   }
 
   @override
-  Future<void> addNewPost(String description) {
+  Future<void> addNewPost(String description,File? imageFile) {
 
+    if(imageFile != null){
+      return mDataAgent.uploadFileToFirebase(imageFile)
+          .then((downloadUrl) => craftNewsFeedVO(description, downloadUrl))
+          .then((newPost) => mDataAgent.addNewPost(newPost));
+    }else{
+      return craftNewsFeedVO(description, "")
+          .then((newPost) => mDataAgent.addNewPost(newPost));
+    }
+  }
+
+  Future<NewsFeedVO> craftNewsFeedVO(String description,String imageFile){
     var currentMilliseconds = DateTime.now().microsecondsSinceEpoch;
     var newPost = NewsFeedVO(
-      id: currentMilliseconds,
-      userName: "Thu Thu",
-      postImage: "",
-      description: description,
-      profilePicture: "assets/images/profile_img3.jpg"
+        id: currentMilliseconds,
+        userName: "Thu Thu",
+        postImage: imageFile,
+        description: description,
+        profilePicture: "assets/images/profile_img3.jpg"
     );
-    return mDataAgent.addNewPost(newPost);
-
+    return Future.value(newPost);
   }
 
   @override
@@ -43,8 +55,15 @@ class SocialModelImpl extends SocialModel{
   }
 
   @override
-  Future<void> editPost(NewsFeedVO newsFeedVO) {
-    return mDataAgent.addNewPost(newsFeedVO);
+  Future<void> editPost(NewsFeedVO newsFeedVO,File? imageFile) {
+    if(imageFile != null){
+      return mDataAgent.uploadFileToFirebase(imageFile)
+          .then((downloadUrl) {newsFeedVO.postImage = downloadUrl;} )
+          .then((newPost) => mDataAgent.addNewPost(newsFeedVO));
+    }else{
+      return mDataAgent.addNewPost(newsFeedVO);
+    }
+
   }
 
   @override
