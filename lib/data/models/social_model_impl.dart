@@ -18,4 +18,34 @@ class SocialModelImpl extends SocialModel{
     return mDataAgent.getNewsFeed();
   }
 
+  @override
+  Future<void> addNewPost(String description) {
+
+    var currentMilliseconds = DateTime.now().microsecondsSinceEpoch;
+    var newPost = NewsFeedVO(
+      id: currentMilliseconds,
+      userName: "Thu Thu",
+      postImage: "",
+      description: description,
+      profilePicture: "assets/images/profile_img3.jpg"
+    );
+    return mDataAgent.addNewPost(newPost);
+
+  }
+
+  @override
+  Future<void> deletePost(int postId) {
+    return mDataAgent.deletePost(postId);
+  }
+
+  @override
+  Future<void> editPost(NewsFeedVO newsFeedVO) {
+    return mDataAgent.addNewPost(newsFeedVO);
+  }
+
+  @override
+  Stream<NewsFeedVO> getNewsFeedById(int newsFeedId) {
+    return mDataAgent.getNewsFeedById(newsFeedId);
+  }
+
 }

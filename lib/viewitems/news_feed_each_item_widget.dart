@@ -3,10 +3,14 @@ import 'package:social_media_app/data/vos/news_feed_vo.dart';
 
 class NewsFeedEachItemWidget extends StatelessWidget{
 
+  final Function(int) onTapDelete;
+  final Function(int) onTapEdit;
   final NewsFeedVO? newsFeedVO;
 
   NewsFeedEachItemWidget({
-    required this.newsFeedVO
+    required this.newsFeedVO,
+    required this.onTapDelete,
+    required this.onTapEdit
 });
 
   @override
@@ -15,6 +19,7 @@ class NewsFeedEachItemWidget extends StatelessWidget{
      padding: const EdgeInsets.all(20),
      child: Container(
        child: Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
          children: [
            Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,7 +29,14 @@ class NewsFeedEachItemWidget extends StatelessWidget{
                  SizedBox(width: 10,),
                  NameAndPostTimeSection(newsFeedVO: newsFeedVO,),
                ],),
-               const Icon(Icons.more_vert_outlined,color: Colors.grey,)
+               MoreButtonSection(
+                 onTapDelete: (){
+                 onTapDelete(newsFeedVO?.id ?? 0);
+               },
+               onTapEdit: (){
+                 onTapEdit(newsFeedVO?.id ?? 0);
+               },
+               )
              ],),
            const SizedBox(height: 10,),
            PostDescriptionSection(newsFeedVO: newsFeedVO,),
@@ -36,6 +48,36 @@ class NewsFeedEachItemWidget extends StatelessWidget{
    );
   }
 
+}
+
+class MoreButtonSection extends StatelessWidget {
+
+  Function onTapDelete;
+  Function onTapEdit;
+
+  MoreButtonSection({
+    super.key,
+    required this.onTapDelete,
+    required this.onTapEdit
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(icon: const Icon(Icons.more_vert_outlined,color: Colors.grey,),
+    itemBuilder: (context)=>
+      [
+        PopupMenuItem(
+          onTap: (){
+            onTapEdit();
+          },
+          child: Text("Edit"),value: 1,),
+        PopupMenuItem(
+          onTap: (){
+            onTapDelete();
+          },
+          child: Text("Delete"),value: 2,)
+      ],);
+  }
 }
 
 
@@ -75,8 +117,12 @@ class PostDescriptionSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        UploadPhotoSection(newsFeedVO: newsFeedVO,),
+        Visibility(
+          visible: (newsFeedVO?.postImage=="")? false: true,
+            child: UploadPhotoSection(newsFeedVO: newsFeedVO,)),
         SizedBox(height: 20,),
         TextDescriptionSection(newsFeedVO: newsFeedVO,),
       ],

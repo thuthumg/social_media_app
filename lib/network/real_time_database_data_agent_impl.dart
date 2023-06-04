@@ -17,49 +17,74 @@ class RealtimeDatabaseDataAgentImpl extends SocialDataAgent{
   RealtimeDatabaseDataAgentImpl._internal();
 
   ///Database
-  var databaseRef = FirebaseDatabase.instance.reference();
+  var databaseRef = FirebaseDatabase.instance.ref();
 
- // DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
+  // @override
+  // Stream<List<NewsFeedVO>> getNewsFeed() {
+  //   return databaseRef.child(newsFeedPath).onValue.map((event) {
+  //
+  //     List<Object?> snapshotData = (event.snapshot.value as List<Object?>);
+  //     List<Object?> mutableList = List.from(snapshotData);
+  //     mutableList.removeAt(0);
+  //
+  //     print("check value = ${mutableList.length}");
+  //     return (mutableList).map<NewsFeedVO>((element) {
+  //       return NewsFeedVO.fromJson(Map<String, dynamic>.from(element as Map<dynamic,dynamic>));
+  //     }).toList();
+  //   });
+  // }
 
   @override
   Stream<List<NewsFeedVO>> getNewsFeed() {
     return databaseRef.child(newsFeedPath).onValue.map((event) {
 
-      List<Object?> snapshotData = (event.snapshot.value as List<Object?>);
-      List<Object?> mutableList = List.from(snapshotData);
-      mutableList.removeAt(0);
+      ///for complex key
+      //event.snapshot.value => Map<String,dynamic> => values=> List<Map<String,dynamic>> => NewsFeedVO.fromJson() => List<NewsFeedVO>
 
-      print("check value = ${mutableList.length}");
-      return (mutableList).map<NewsFeedVO>((element) {
-        return NewsFeedVO.fromJson(Map<String, dynamic>.from(element as Map<dynamic,dynamic>));
+
+      Map<Object?, Object?> objectMap = event.snapshot.value as Map<Object?, Object?>; // Replace with the actual object
+      Map<String?, dynamic> convertedMap = {};
+     // print("check value = ${objectMap.length}");
+      objectMap.forEach((key, value) {
+       // print("check value 1= ${key.toString()} ${value}");
+        convertedMap[key.toString()] = value;
+      });
+     // print("check value 2= ${convertedMap.values}");
+
+      return (convertedMap.values).map<NewsFeedVO>((element) {
+        //print("check value = ${element.length}");
+        return NewsFeedVO.fromJson(Map<String, dynamic>.from(element));
       }).toList();
     });
   }
 
-  // @override
-  // Stream<List<NewsFeedVO>> getNewsFeed() {
-  //
-  //
-  //
-  //   // databaseReference.child(newsFeedPath).once().then((snapshot) {
-  //   //   // Handle the retrieved data
-  //   //   var data = snapshot.snapshot.value;
-  //   //   // Process the data as needed
-  //   // }).catchError((error) {
-  //   //   // Handle any errors that occur
-  //   //   print('Error: $error');
-  //   // });
-  //
-  //
-  //  return databaseRef.child(newsFeedPath).onValue.map((event){
-  //
-  //    return (event.snapshot.value as List<Object>).map<NewsFeedVO>((element){
-  //      return NewsFeedVO.fromJson(Map<String,dynamic>.from(element as Map<dynamic,dynamic>));
-  //  }).toList();
-  //
-  //  });
-  //
-  //
-  // }
+  @override
+  Future<void> addNewPost(NewsFeedVO newPost) {
+   return databaseRef
+       .child(newsFeedPath)
+       .child(newPost.id.toString())
+       .set(newPost.toJson());
+  }
+
+  @override
+  Future<void> deletePost(int postId) {
+    return databaseRef.child(newsFeedPath)
+        .child(postId.toString())
+        .remove();
+  }
+
+  @override
+  Stream<NewsFeedVO> getNewsFeedById(int newsFeedId) {
+
+    return databaseRef
+        .child(newsFeedPath)
+        .child(newsFeedId.toString())
+        .once()
+        .asStream()
+        .map((snapShot){
+          return NewsFeedVO.fromJson(Map<String,dynamic>.from((snapShot.snapshot.value as dynamic)));
+    });
+  }
+
 
 }
