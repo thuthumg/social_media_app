@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:social_media_app/data/models/authentication_model.dart';
+import 'package:social_media_app/data/models/authentication_model_impl.dart';
 import 'package:social_media_app/data/models/social_model.dart';
 import 'package:social_media_app/data/models/social_model_impl.dart';
 import 'package:social_media_app/data/vos/news_feed_vo.dart';
+import 'package:social_media_app/data/vos/user_vo.dart';
 
 class AddNewPostBloc extends ChangeNotifier {
   ///State
@@ -20,11 +23,16 @@ class AddNewPostBloc extends ChangeNotifier {
   String userName = "";
   String profilePicture = "";
   NewsFeedVO? mNewsFeed;
+  UserVO? _loggedInUser;
 
   ///Model
   final SocialModel _model = SocialModelImpl();
+  final AuthenticationModel _authenticationModel = AuthenticationModelImpl();
 
   AddNewPostBloc({int? newsFeedId}) {
+
+    _loggedInUser = _authenticationModel.getLoggedInUser();
+
     if (newsFeedId != null) {
       isInEditMode = true;
       _prepopulateDataForEditMode(newsFeedId);
@@ -97,8 +105,8 @@ class AddNewPostBloc extends ChangeNotifier {
   }
 
   void _prepopulateDataForAddNewPost() {
-    userName = "Thu Thu";
-    profilePicture = "assets/images/profile_img3.jpg";
+    userName = _loggedInUser?.userName??"";
+    profilePicture = _loggedInUser?.profileImageUrl??"";
     _notifySafely();
   }
 

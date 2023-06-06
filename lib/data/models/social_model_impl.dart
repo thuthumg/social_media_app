@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:social_media_app/data/models/authentication_model.dart';
+import 'package:social_media_app/data/models/authentication_model_impl.dart';
 import 'package:social_media_app/data/models/social_model.dart';
 import 'package:social_media_app/data/vos/news_feed_vo.dart';
 import 'package:social_media_app/network/cloud_firestore_data_agent_impl.dart';
@@ -15,9 +17,9 @@ class SocialModelImpl extends SocialModel{
   }
   SocialModelImpl._internal();
 
-  SocialDataAgent mDataAgent = RealtimeDatabaseDataAgentImpl();
-
- // SocialDataAgent mDataAgent = CloudFirestoreDataAgentImpl();
+ // SocialDataAgent mDataAgent = RealtimeDatabaseDataAgentImpl();
+  final AuthenticationModel _authenticationModel = AuthenticationModelImpl();
+  SocialDataAgent mDataAgent = CloudFirestoreDataAgentImpl();
 
   @override
   Stream<List<NewsFeedVO>> getNewsFeed() {
@@ -41,7 +43,7 @@ class SocialModelImpl extends SocialModel{
     var currentMilliseconds = DateTime.now().microsecondsSinceEpoch;
     var newPost = NewsFeedVO(
         id: currentMilliseconds,
-        userName: "Thu Thu",
+        userName: _authenticationModel.getLoggedInUser().userName,
         postImage: imageFile,
         description: description,
         profilePicture: "assets/images/profile_img3.jpg"

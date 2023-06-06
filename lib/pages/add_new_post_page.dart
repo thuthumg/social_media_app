@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_app/blocs/add_new_post_bloc.dart';
+import 'package:social_media_app/widgets/loading_view.dart';
 
 class AddNewPostPage extends StatelessWidget {
   final int? newsFeedId;
@@ -74,7 +75,7 @@ class AddNewPostPage extends StatelessWidget {
               child: Center(
                 child: LoadingView(),
               ),
-            ))
+            ),)
           ],
         ),
       ),
@@ -82,31 +83,7 @@ class AddNewPostPage extends StatelessWidget {
   }
 }
 
-class LoadingView extends StatelessWidget {
-  const LoadingView({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black12,
-      child: const Center(
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: LoadingIndicator(
-              indicatorType: Indicator.audioEqualizer, /// Required, The loading type of the widget
-              colors: [Colors.white],       /// Optional, The color collections
-              strokeWidth: 2,                     /// Optional, The stroke of the line, only applicable to widget which contains line
-              backgroundColor: Colors.transparent,      /// Optional, Background of the widget
-              pathBackgroundColor: Colors.black   /// Optional, the stroke backgroundColor
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class PostImageView extends StatelessWidget {
   const PostImageView({
@@ -305,7 +282,7 @@ class ProfilePicAndProfileNameSection extends StatelessWidget {
               ),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(bloc.profilePicture),
+                image: NetworkImage(bloc.profilePicture),
               ),
             ),
           ),
