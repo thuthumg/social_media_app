@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_app/blocs/news_feed_bloc.dart';
 import 'package:social_media_app/pages/add_new_post_page.dart';
 import 'package:social_media_app/pages/login_page.dart';
+import 'package:social_media_app/pages/text_detectioon_page.dart';
 import 'package:social_media_app/resources/dimens.dart';
 import 'package:social_media_app/utils/extensions.dart';
 import 'package:social_media_app/viewitems/news_feed_each_item_widget.dart';
@@ -24,7 +25,16 @@ class NewsFeedPage extends StatelessWidget{
               color: Color.fromRGBO(85, 85, 85, 1),
               fontSize: 25,
               fontWeight: FontWeight.w600)),
-          actions: [Icon(Icons.search,color: Colors.grey,),
+          actions: [
+            GestureDetector(
+                onTap: (){
+
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TextDetectionPage(
+
+                  )));
+                },
+                child: Image.asset("assets/images/text_detect_icon.png")),
+            Icon(Icons.search,color: Colors.grey,),
           SizedBox(width: 10,),
           Consumer<NewsFeedBloc>(
             builder: (context,bloc,child)=> GestureDetector(
