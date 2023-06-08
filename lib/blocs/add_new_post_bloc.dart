@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:social_media_app/analytics/firebase_analytics_tracker.dart';
 import 'package:social_media_app/data/models/authentication_model.dart';
 import 'package:social_media_app/data/models/authentication_model_impl.dart';
 import 'package:social_media_app/data/models/social_model.dart';
@@ -39,8 +40,12 @@ class AddNewPostBloc extends ChangeNotifier {
     } else {
       _prepopulateDataForAddNewPost();
     }
-  }
 
+    ///Firebase
+    _sendAnalyticsData(addNewPostScreenReached,null);
+
+
+  }
   void onNewPostTextChanged(String newPostDescription) {
     this.newPostDescription = newPostDescription;
   }
@@ -58,11 +63,14 @@ class AddNewPostBloc extends ChangeNotifier {
         return _editNewsFeedPost().then((value) {
           isLoading = false;
           _notifySafely();
+          _sendAnalyticsData(
+              editPostAction, {postId: mNewsFeed?.id.toString() ?? ""});
         });
       }else{
         return _createNewNewsFeedPost().then((value){
           isLoading = false;
           _notifySafely();
+          _sendAnalyticsData(addNewPostAction, null);
         });
       }
 
@@ -119,4 +127,10 @@ class AddNewPostBloc extends ChangeNotifier {
     chosenImageFile = null;
     _notifySafely();
   }
+
+  /// Analytics
+  void _sendAnalyticsData(String name, Map<String, String>? parameters) async {
+    await FirebaseAnalyticsTracker().logEvent(name, parameters);
+  }
+
 }
