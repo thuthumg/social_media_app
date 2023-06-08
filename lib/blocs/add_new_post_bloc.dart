@@ -9,6 +9,8 @@ import 'package:social_media_app/data/models/social_model_impl.dart';
 import 'package:social_media_app/data/vos/news_feed_vo.dart';
 import 'package:social_media_app/data/vos/user_vo.dart';
 
+import '../remote_config/firebase_remote_config_file.dart';
+
 class AddNewPostBloc extends ChangeNotifier {
   ///State
   String newPostDescription = "";
@@ -26,9 +28,16 @@ class AddNewPostBloc extends ChangeNotifier {
   NewsFeedVO? mNewsFeed;
   UserVO? _loggedInUser;
 
+  Color themeColor = Colors.black;
+
   ///Model
   final SocialModel _model = SocialModelImpl();
   final AuthenticationModel _authenticationModel = AuthenticationModelImpl();
+
+
+  /// Remote Configs
+  final FirebaseRemoteConfigFile _firebaseRemoteConfig = FirebaseRemoteConfigFile();
+
 
   AddNewPostBloc({int? newsFeedId}) {
 
@@ -43,9 +52,16 @@ class AddNewPostBloc extends ChangeNotifier {
 
     ///Firebase
     _sendAnalyticsData(addNewPostScreenReached,null);
-
+    _getRemoteConfigAndChangeTheme();
 
   }
+
+
+  void _getRemoteConfigAndChangeTheme() {
+    themeColor = _firebaseRemoteConfig.getThemeColorFromRemoteConfig();
+    _notifySafely();
+  }
+
   void onNewPostTextChanged(String newPostDescription) {
     this.newPostDescription = newPostDescription;
   }

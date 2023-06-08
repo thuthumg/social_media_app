@@ -361,6 +361,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.3+2"
+  firebase_in_app_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_in_app_messaging
+      sha256: "82ec4d3c7bd2c7a70c3a61d5a0be2fcaecff6395d7a920b8c1f55978e6ce74c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.3+2"
+  firebase_in_app_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_in_app_messaging_platform_interface
+      sha256: "4e5b2fe647f5307403be1e8dfc2a22aadb1d65c9bb2e1b855b9ea4e064bc0a59"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4+2"
+  firebase_installations:
+    dependency: "direct main"
+    description:
+      name: firebase_installations
+      sha256: "81493183261ef4cc60cf615f329c0a60055ff1d6c9ac574104b1933927f53c84"
+      url: "https://pub.dev"
+    source: hosted
+    version: "16.3.6"
   firebase_messaging:
     dependency: "direct main"
     description:
@@ -409,6 +433,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4+2"
+  firebase_remote_config:
+    dependency: "direct main"
+    description:
+      name: firebase_remote_config
+      sha256: d1534688dcee35acbca15853aad19952231a891015b3a62020423f9526e11d87
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.2"
+  firebase_remote_config_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_platform_interface
+      sha256: "90f619236a30b821a344524b54ad9ab5f8d1b57931db3fa0876a5c44f0298e58"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.2"
+  firebase_remote_config_web:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_web
+      sha256: "025590017299082e9add595e078ef0f10ffa2d9b58c382a70bbbc8e94e3407e4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.2"
   firebase_storage:
     dependency: "direct main"
     description:

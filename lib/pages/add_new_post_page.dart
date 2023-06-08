@@ -188,7 +188,7 @@ class PostButton extends StatelessWidget {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: bloc.themeColor,
             border: Border.all(
               color: Colors.grey,
               // set the border stroke color here
